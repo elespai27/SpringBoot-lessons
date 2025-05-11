@@ -2,6 +2,7 @@ package com.ironhack.spring_lessons.repository;
 
 
 import com.ironhack.spring_lessons.model.Course;
+import com.ironhack.spring_lessons.model.Teacher;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,31 +19,39 @@ class CourseRepositoryTest {
     @Autowired
     //inyección de dependencias para que implemente lo de JpaRepository de la Interface
     CourseRepository courseRepository;
-    //estas líneas crean un obj (con la libreria Spring)
+    //estas líneas crean un obj (con la librería Spring)
 
+    @Autowired
+    TeacherRepository teacherRepository;
 
     @BeforeEach
     public void setUp() {
-        Course algebra = new Course("Algebra", 50, "B1", "2weeks", 3);
-        courseRepository.save(algebra);
-        System.out.println(algebra);
+        Optional<Teacher> teacherOptional = teacherRepository.findById(2);
+        if (teacherOptional.isPresent()) {
+            Course algebra = new Course("Algebra", 50, "B1", "2weeks", teacherOptional.get());
+            courseRepository.save(algebra);
+            System.out.println(algebra);
+
+        }
+//
     }
 
     @AfterEach
-     public void tearDown() {
+    public void tearDown() {
         courseRepository.deleteById("Algebra");
     }
 
+    //JPA Test
     @Test
     public void findAll_courses_courseList() {
         List<Course> courseList = courseRepository.findAll();
         System.out.println(courseList);
-        assertEquals(7, courseList.size());
+        assertEquals(6, courseList.size());
     }
 
     @Test
     public void finById_validCourse_correctCourse() {
-        Optional<Course> courseOptional= courseRepository.findById("English");
+        Optional<Course> courseOptional = courseRepository.findById("Algebra");
         assertTrue(courseOptional.isPresent());
         System.out.println(courseOptional.get());
         assertEquals(50, courseOptional.get().getHours());
@@ -68,18 +77,52 @@ class CourseRepositoryTest {
         System.out.println(courseList);
         assertEquals(3, courseList.size());
     }
-@Test
+
+    @Test
     public void findAllByCourseContaining_str_courseList() {
         List<Course> courseList = courseRepository.findAllByCourseContaining("p");
-    System.out.println(courseList);
-    assertEquals(3, courseList.size());
-}
+        System.out.println(courseList);
+        assertEquals(3, courseList.size());
+    }
 
-@Test
+    @Test
     public void findAllByHoursLessThan_validaHours_courseList() {
         List<Course> courseList = courseRepository.findAllByHoursLessThan(150);
-    System.out.println(courseList);
-    assertEquals(4, courseList.size());
-}
+        System.out.println(courseList);
+        assertEquals(3, courseList.size());
+    }
+// JPQL Test
 
+    @Test
+    public void findAllWhereHours150_courses_courseList() {
+        List<Course> courseList = courseRepository.findAllWhereHours150();
+        System.out.println(courseList);
+        assertEquals(2, courseList.size());
+
+    }
+
+    @Test
+    public void findAllWhereClassroomAndHoursParams_courses_courselist() {
+        List<Course> courseList = courseRepository.findAllWhereClassroomAndHoursParams("B1", 150);
+        System.out.println(courseList);
+        assertEquals(3, courseList.size());
+    }
+
+    // Native SQL Test
+
+    @Test
+    public void nativeFindAllWhereHours150_courses_courseList() {
+        List<Course> courseList = courseRepository.nativeFindAllWhereHours150();
+        System.out.println(courseList);
+        assertEquals(2, courseList.size());
+
+    }
+
+    @Test
+    public void nativeFindAllWhereClassroomAndHoursParams_courses_courselist() {
+        List<Course> courseList = courseRepository.naitveFindAllWhereClassroomAndHoursParams("B1", 150);
+        System.out.println(courseList);
+        assertEquals(3, courseList.size());
+
+    }
 }

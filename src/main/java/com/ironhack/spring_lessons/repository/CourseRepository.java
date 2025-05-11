@@ -13,20 +13,29 @@ public interface CourseRepository extends JpaRepository<Course, String> {
     //Métodos propios en JPA de consulta
     //los nombres del método siempre tiene que ser así: "findBy" + la prop de búsqueda
 
-    // JPA Keywords
+    // JPA Keywords Java Persistency Api(Application Interfaces Programming)
 
-    Optional<Course> findByHours(Integer hours);
+    Optional<Course> findByHours(Integer hours);//solo para traer un elemento
     List<Course> findAllByClassroom(String classroom);
     List<Course> findAllByCourseContaining(String str);
     List<Course> findAllByHoursLessThan(Integer hours);
 
-    // JPQL
+    //     JPQL Java Persistency Query Language
 
-//    @Query("SELECT c FROM Course c WHERE c.hours = 150")
-//    List<Course> findAllWhereHours150();
-//
-//    @Query("SELECT c FROM Course c WHERE c.classroom = ?1 AND c.hours <= ?2")
-//    List<Course> findAllWhereClassroomAndHoursParams(String classroom Integer hours);
+    @Query("SELECT c FROM Course c WHERE c.hours = 150")
+    List<Course> findAllWhereHours150();
+
+    @Query("SELECT c FROM Course c WHERE c.classroom = ?1 AND c.hours <= ?2")
+    List<Course> findAllWhereClassroomAndHoursParams(String classroom, Integer hours);
+
+
+    //     NATIVE SQL
+
+    @Query(value = "SELECT * FROM course c WHERE c.hours = 150", nativeQuery = true)
+    List<Course> nativeFindAllWhereHours150();
+
+    @Query(value = "SELECT * FROM Course c WHERE c.classroom = ?1 AND c.hours <= ?2", nativeQuery = true)
+    List<Course> naitveFindAllWhereClassroomAndHoursParams(String classroom, Integer hours);
 
 
 
