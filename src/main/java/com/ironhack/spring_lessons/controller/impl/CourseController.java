@@ -1,5 +1,7 @@
 package com.ironhack.spring_lessons.controller.impl;
 
+import com.ironhack.spring_lessons.controller.dto.CourseClassroomDTO;
+import com.ironhack.spring_lessons.controller.dto.CourseHoursDTO;
 import com.ironhack.spring_lessons.model.Course;
 import com.ironhack.spring_lessons.repository.CourseRepository;
 import com.ironhack.spring_lessons.service.interfaces.ICourseService;
@@ -50,6 +52,29 @@ public class CourseController {
         courseService.saveCourse(course);
     }
 
+    //  ***************************************************  PUT (Update the Information) ****************************************
+
+    @PutMapping("/courses/{id}")
+    public Course updateCourse(@RequestBody @Valid Course course, @PathVariable String id) {
+        return courseService.updateCourse(course, id);
+    }
+
+    //  ***************************************************  PATH (Update some of the Information) ****************************************
+
+    @PatchMapping("/courses/hours/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCourseHours(@RequestBody @Valid CourseHoursDTO courseHoursDTO, @PathVariable String id) {
+        courseService.updateCourseHours(courseHoursDTO.getHours(), id);
+
+    }
+
+    @PatchMapping("/courses/classroom/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateCourseClassroom(@RequestBody @Valid CourseClassroomDTO courseClassroomDTO, @PathVariable String id)
+    {
+        courseService.updateCourseClassroom(courseClassroomDTO.getClassroom(), id);
+
+    }
     //  **************************************************  DELETE (Obviously, delete the information) ****************************
 
     @DeleteMapping("/courses/{id}")
@@ -57,6 +82,7 @@ public class CourseController {
     public void deleteCourse(@PathVariable String id) {
         courseService.deleteCourse(id);
     }
+
 
 
 }

@@ -41,6 +41,31 @@ public class CourseService implements ICourseService {
     }
 
     @Override
+    public Course updateCourse(Course course, String id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if (courseOptional.isEmpty()) return null;
+        return(courseRepository.save(course));
+    }
+
+    @Override
+    public void updateCourseHours(Integer hours, String id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if (courseOptional.isEmpty()) return;
+        Course course = courseOptional.get();
+        course.setHours(hours);
+        courseRepository.save(course);
+    }
+
+    @Override
+    public void updateCourseClassroom(String classroom, String id) {
+        Optional<Course> courseOptional = courseRepository.findById(id);
+        if (courseOptional.isEmpty()) return;
+        Course course = courseOptional.get();
+        course.setClassroom(classroom);
+        courseRepository.save(course);
+    }
+
+    @Override
     public void deleteCourse(String id) {
         courseRepository.deleteById(id);
     }
