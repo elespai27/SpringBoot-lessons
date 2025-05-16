@@ -3,13 +3,11 @@ package com.ironhack.spring_lessons.controller.impl;
 import com.ironhack.spring_lessons.controller.dto.CourseClassroomDTO;
 import com.ironhack.spring_lessons.controller.dto.CourseHoursDTO;
 import com.ironhack.spring_lessons.model.Course;
-import com.ironhack.spring_lessons.repository.CourseRepository;
 import com.ironhack.spring_lessons.service.interfaces.ICourseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
